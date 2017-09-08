@@ -25,20 +25,6 @@ class DynamoDB(object):
             table = dynamodb.Table(self.data_table_name)
             self.dynamodb = table
 
-    def find_or_create_by(self, log_dict, data_key):
-
-        current_logs = self.find(data_key)
-
-        # If the alert is duplicate false do not create another instance of it.
-        for log_entry in current_logs:
-            if log_entry.get('alert_code') == log_dict.get('alert_code'):
-                return None
-            else:
-                continue
-
-        # Else create another alert.
-        return self.create(log_dict)
-
     def create(self, log_dict):
         self.connect_dynamodb()
 
@@ -81,7 +67,7 @@ class DynamoDB(object):
 
     def _create_id(self):
         """
-        :return: random alertid
+        :return: random id
         """
         return binascii.b2a_hex(os.urandom(15))
 
